@@ -1,4 +1,4 @@
-package com.micropos.products;
+package com.micropos.carts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableEurekaClient
 @SpringBootApplication
-public class ProductsApplication {
+public class CartsApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ProductsApplication.class, args);
+        SpringApplication.run(CartsApplication.class, args);
     }
 }

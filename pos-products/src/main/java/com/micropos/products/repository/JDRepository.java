@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.List;
 public class JDRepository implements ProductRepository {
     private List<Product> products = null;
 
+
+    @Cacheable(value="products")
     @Override
     public List<Product> allProducts() {
         try {
@@ -27,6 +30,7 @@ public class JDRepository implements ProductRepository {
         return products;
     }
 
+    @Cacheable(value="products",key = "#p0")
     @Override
     public Product findProduct(String productId) {
         for (Product p : allProducts()) {

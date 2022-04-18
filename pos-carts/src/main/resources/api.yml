@@ -1,0 +1,162 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Carts
+  license:
+    name: MIT
+paths:
+  /carts:
+    get:
+      summary: List all items
+      operationId: listItems
+      tags:
+        - items
+      responses:
+        '200':
+          description: A paged array of items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        default:
+          description: unexpected error
+    post:
+      summary: Adds a new item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                id:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: error
+  /carts/{itemId}:
+    get:
+      summary: Info for a specific item
+      operationId: showItemById
+      tags:
+        - item
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The id of the item to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: Expected response to a valid request
+
+        default:
+          description: unexpected error
+    delete:
+      summary: Delete item by id
+      operationId: deleteItemById
+      tags:
+        - item
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The id of the item to retrieve
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: id not found
+  /carts/cancel:
+    delete:
+      summary: Delete all items
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: Deleted
+        '404':
+          description: error
+  /carts/checkout:
+    get:
+      summary: checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: Success
+        '404':
+          description: error
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: double
+        image:
+          type: string
+    Products:
+      type: array
+      items:
+        $ref: "#/components/schemas/Product"
+    Item:
+      type: object
+      required:
+        - product
+        - quantity
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          type: integer
+    Cart:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
